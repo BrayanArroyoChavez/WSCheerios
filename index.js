@@ -14,6 +14,8 @@ const axios = require('axios');
 async function init(){
     const html = await axios.get('https://eshop-prices.com/games/on-sale?currency=MXN&direction=desc&sort_by=popularity');
     const $ = await cheerio.load(html.data);
-    console.log($)
+    
+    const webtitle = $('title');
+    console.log(webtitle.html())
     }
 init()
