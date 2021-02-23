@@ -29,12 +29,18 @@ async function init(){
     console.log(webtitle.html());
 
     /**
-     * Extracción de la información de interes de la página para el caso en especifico de esta página la 
-     * información se encontraba dentro del cuerpo de una tabla.
-     * Esto nos trae todo el codigo html de la tabla que se encuentra en la página
+     * + Extracción de la información de interes de la página para el caso en especifico de esta página la 
+     * información se encontraba dentro de los registros del cuerpo de una tabla.
+     * + Esto nos trae todo el codigo html de la tabla que se encuentra en la página.
+     * + Para este caso se extrajeron tres valores en especifico name, symb y price son los nombres de las 
+     * clases que contienen la información deseada, se hace uso de la función text para traer unicamente el
+     * texto encontrada en la etiqueta de la clase
      */
-    const criptomonedas = $('tbody').each((i,el) =>{
-        console.log(i, $(el).html());
+    $('tbody tr').each((i,el) =>{
+        const name = $(el).find('.name').text();
+        const symb = $(el).find('.symb').text();
+        const price = $(el).find('.price').text();
+        console.log(i,name,"\t\t",symb,"\t\t$",price);
     });
     }
 
