@@ -8,8 +8,9 @@
  * + La libreria cheerio se utiliza para recolectar la información de la página destino
  * + La libreria axios nos permite acceder a la página destino
  */
-const cheerio = require('cheerio')
+const cheerio = require('cheerio');
 const axios = require('axios');
+const mysql = require('mysql');
 
 async function init(){
     /**
@@ -44,4 +45,24 @@ async function init(){
     });
     }
 
-init()
+    function connection(){
+        const connection = mysql.createConnection({
+            host: 'localhost',
+            database: 'criptomonedas',
+            user: 'root',
+            passworld: ''
+        });  
+        
+        connection.connect(function(error){
+            if(error){
+                throw error;
+            }else{
+                console.log("conectado")
+            }
+        });
+        
+        connection.end()
+    }
+
+init();
+connection();
