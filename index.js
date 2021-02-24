@@ -13,6 +13,20 @@ const axios = require('axios');
 const mysql = require('mysql');
 
 async function init(){
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        database: 'criptomonedas',
+        user: 'root',
+        passworld: ''
+    });  
+    
+    connection.connect(function(error){
+        if(error){
+            throw error;
+        }else{
+            console.log("conectado")
+        }
+    });
     /**
      * + En la constante html se guarda la página destino y la constante $ se guarda la página extraida 
      * convertida en un objetivo de cheerio.
@@ -41,28 +55,14 @@ async function init(){
         const name = $(el).find('.name').text();
         const symb = $(el).find('.symb').text();
         const price = $(el).find('.price').text();
-        console.log(i,name,"\t\t",symb,"\t\t$",price);
+        var sql = "INSERT INTO criptomonedas (name, symb, price) VALUES ('"+name+"', '"+symb+"','"+price+"')";
+        connection.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record inserted");
     });
+    });
+    connection.end()
     }
 
-    function connection(){
-        const connection = mysql.createConnection({
-            host: 'localhost',
-            database: 'criptomonedas',
-            user: 'root',
-            passworld: ''
-        });  
-        
-        connection.connect(function(error){
-            if(error){
-                throw error;
-            }else{
-                console.log("conectado")
-            }
-        });
-        
-        connection.end()
-    }
 
 init();
-connection();
