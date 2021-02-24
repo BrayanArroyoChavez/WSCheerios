@@ -55,7 +55,7 @@ async function init(){
         const name = $(el).find('.name').text();
         const symb = $(el).find('.symb').text();
         const price = $(el).find('.price').text();
-        var sql = "INSERT INTO criptomonedas (name, symb, price) VALUES ('"+name+"', '"+symb+"','"+price+"')";
+        var sql = "INSERT INTO criptomonedas (name, symb, price, date) VALUES ('"+name+"', '"+symb+"','"+price+"',,'"+Date.now()+"')";
         connection.query(sql, function (err, result) {
         if (err) throw err;
         console.log("1 record inserted");
