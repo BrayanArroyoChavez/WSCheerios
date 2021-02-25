@@ -6,6 +6,7 @@
 const connection = require('./connection')
 
 /**
+ * TEMPORALMENTE SIN USO
  * Función para insertar registros en la base de datos
  */
 function insert(){

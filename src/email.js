@@ -12,8 +12,15 @@
 const nodemailer = require("nodemailer");
 const hbs = require("nodemailer-express-handlebars")
 const path = require('path');
+const connection = require('./connection')
 
 async function main() {
+
+  var sql = "SELECT FROM criptomonedas (name, symb, price, date) VALUES ('"+name+"', '"+symb+"','"+price+"','"+datetime+"')";
+    connection.con.query(sql, function (err, result) {
+        if (err) throw err;
+    });
+
   //crea un objeto transportador
   let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
