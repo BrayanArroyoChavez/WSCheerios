@@ -10,23 +10,10 @@
  */
 const cheerio = require('cheerio');
 const axios = require('axios');
-const mysql = require('mysql');
+const date = require('date-and-time');
+const connection = require('./connection')
 
 async function init(){
-    const connection = mysql.createConnection({
-        host: 'localhost',
-        database: 'criptomonedas',
-        user: 'root',
-        passworld: ''
-    });  
-    
-    connection.connect(function(error){
-        if(error){
-            throw error;
-        }else{
-            console.log("conectado")
-        }
-    });
     /**
      * + En la constante html se guarda la página destino y la constante $ se guarda la página extraida 
      * convertida en un objetivo de cheerio.
@@ -35,13 +22,6 @@ async function init(){
      */
     const html = await axios.get('https://mx.investing.com/crypto/');
     const $ = await cheerio.load(html.data);
-    
-    /**
-     * Prueba de funcionamiento
-     * Extracción e impresión en consola del título de la página
-     */
-    const webtitle = $('title');
-    console.log(webtitle.html());
 
     /**
      * + Extracción de la información de interes de la página para el caso en especifico de esta página la 
@@ -51,18 +31,19 @@ async function init(){
      * clases que contienen la información deseada, se hace uso de la función text para traer unicamente el
      * texto encontrada en la etiqueta de la clase.
      */
+    const now = new Date();
+    var datetime = date.format(now, 'YYYY-MM-DD HH:mm:ss'); 
     $('tbody tr').each((i,el) =>{
-        const name = $(el).find('.name').text();
-        const symb = $(el).find('.symb').text();
-        const price = $(el).find('.price').text();
-        var sql = "INSERT INTO criptomonedas (name, symb, price, date) VALUES ('"+name+"', '"+symb+"','"+price+"',,'"+Date.now()+"')";
-        connection.query(sql, function (err, result) {
-        if (err) throw err;
-        console.log("1 record inserted");
+    var name = $(el).find('.name').text();
+    var symb = $(el).find('.symb').text();
+    var price = $(el).find('.price').text();
+    var sql = "INSERT INTO criptomonedas (name, symb, price, date) VALUES ('"+name+"', '"+symb+"','"+price+"','"+datetime+"')";
+    connection.con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
     });
     });
-    connection.end()
-    }
+}
 
 
 init();
