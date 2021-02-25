@@ -1,3 +1,8 @@
+/**
+ * Autor: Arroyo Chávez Brayan Alberto
+ * Fecha: February 22, 2021
+ */
+
 "use strict";
 const nodemailer = require("nodemailer");
 const hbs = require("nodemailer-express-handlebars")

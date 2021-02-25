@@ -39,8 +39,8 @@ async function init(){
     var price = $(el).find('.price').text();
     var sql = "INSERT INTO criptomonedas (name, symb, price, date) VALUES ('"+name+"', '"+symb+"','"+price+"','"+datetime+"')";
     connection.con.query(sql, function (err, result) {
-    if (err) throw err;
-    console.log("1 record inserted");
+        if (err) throw err;
+        console.log("1 record inserted");
     });
     });
 }
