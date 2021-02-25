@@ -1,10 +1,12 @@
 "use strict";
 const nodemailer = require("nodemailer");
+const hbs = require("nodemailer-express-handlebars")
+const path = require('path');
 
 async function main() {
 
-  // crea un objeto transportador reutilizable utilizando el transporte SMTP predeterminado
-  let transporter = nodemailer.createTransport({
+    // crea un objeto transportador reutilizable utilizando el transporte SMTP predeterminado
+    let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
     secure: false,
@@ -12,16 +14,37 @@ async function main() {
       user: "16460121@colima.tecnm.mx",
       pass: "cuije1804"
     }
-  });
+    });
 
-  // enviar correo con objeto de transporte definido
-  let info = await transporter.sendMail({
+    const handlebarOptions = {
+        viewEngine: {
+          extName: ".handlebars",
+          partialsDir: path.resolve(__dirname, "views"),
+          defaultLayout: false,
+        },
+        viewPath: path.resolve(__dirname, "views"),
+        extName: ".handlebars",
+    };
+      
+    transporter.use(
+        "compile",
+        hbs(handlebarOptions)
+    );
+    /**
+     *  transporter.use('compile',hbs({
+     *      viewEngine: 'express-handlebars',
+     *      viewPath: path.resolve(__dirname, ".././."),
+     *  }));
+     */
+    
+
+    // enviar correo con objeto de transporte definido
+    let info = await transporter.sendMail({
     from: "16460121@colima.tecnm.mx",
     to: "arroyob71@gmail.com",
     subject: "Prueba",
-    text: "Prueba de funcionamiento",
-    html: "<b>Hello world?</b>", 
-  });
+    template: "email"
+    });
 
   console.log("Message sent: %s", info.messageId);
 }
