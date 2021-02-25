@@ -7,11 +7,13 @@
  * + Se importa la libreria cheerio y axios
  * + La libreria cheerio se utiliza para recolectar la información de la página destino
  * + La libreria axios nos permite acceder a la página destino
+ * + ./connection y ./db para importar los documentos js que contienen la conexion a la base de datos y las operaciones  
  */
 const cheerio = require('cheerio');
 const axios = require('axios');
 const date = require('date-and-time');
 const connection = require('./connection')
+const db = require('./db')
 
 async function init(){
     /**
