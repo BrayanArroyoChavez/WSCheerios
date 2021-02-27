@@ -4,34 +4,39 @@
  */
 
 const connection = require('./connection')
-
-/**
- * TEMPORALMENTE SIN USO
- * Función para insertar registros en la base de datos
- */
-function insert(){
-    var sql = connection.query('INSERT INTO ?? SET ?', [columns, table], function (error, results, fields) {
-        if (error) throw error;   
-    });
-
-    connection.con.query(sql, function (err, result) {
-        if (err) throw err;
-    });
-}
-/**
- * Función para realizar consultas a la base de datos
- */
-function select(columns, table, condition){
-    if (arguments.length = 3){
-        var sql = connection.query('SELECT ?? FROM ?? WHERE id = ?', [columns, table, condition], function (error, results, fields) {
-            if (error) throw error;   
-        });
-    }else{
-        var sql = connection.query('SELECT ?? FROM ??', [columns, table], function (error, results, fields) {
-            if (error) throw error;   
-        });
+    const db = {};
+    /**
+     * Consulta a la base de datos para extraer el correo que sera usado como remitente
+     */
+    function getAuth() {
+    return dbQuery("SELECT p.email, u.password FROM `persona` AS p JOIN `persona_usuario` AS pu ON p.id = pu.id_persona JOIN `usuario` AS u ON u.id = pu.id_usuario WHERE p.type = 'admin'");
     }
-    connection.con.query(sql, function (err, result) {
-        if (err) throw err;
+    /**
+     * Consulta a la base de datos para extraer todos los correcos de contacto
+     */
+    function getContact() {
+    return dbQuery("SELECT email FROM `persona` WHERE type = 'contacto'");
+    }
+    /**
+     * Se creo una función que recibe como parametro las consultas de las bases de datos para ejecutarlas
+     * y que a su vez también devuelve el resultado obtenido haciendo uso de las promesas
+     */
+    function dbQuery(databaseQuery) {
+    return new Promise(data => {
+        connection.con.query(databaseQuery, function (error, result) {
+        if (error) throw error;
+        try {
+            data(result);
+        } catch (error) {
+            data({});
+            throw error;
+        }
+        });
     });
-}
+    }
+
+    db.getAuth = getAuth;
+    db.getContact = getContact;
+    db.dbQuery = dbQuery;
+
+    module.exports = db;
