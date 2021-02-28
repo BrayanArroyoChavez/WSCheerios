@@ -18,6 +18,12 @@ const connection = require('./connection')
     return dbQuery("SELECT email FROM `persona` WHERE type = 'contacto'");
     }
     /**
+     * Consulta a la base de datos para extraer todos los correcos de contacto
+     */
+    function getCripto() {
+        return dbQuery("SELECT * FROM `criptomonedas`");
+    }
+    /**
      * Se creo una función que recibe como parametro las consultas de las bases de datos para ejecutarlas
      * y que a su vez también devuelve el resultado obtenido haciendo uso de las promesas
      */
@@ -37,6 +43,7 @@ const connection = require('./connection')
 
     db.getAuth = getAuth;
     db.getContact = getContact;
+    db.getCripto = getCripto;
     db.dbQuery = dbQuery;
 
     module.exports = db;
