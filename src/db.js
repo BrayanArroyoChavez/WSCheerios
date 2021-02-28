@@ -18,7 +18,7 @@ const connection = require('./connection')
     return dbQuery("SELECT email FROM `persona` WHERE type = 'contacto'");
     }
     /**
-     * Consulta a la base de datos para extraer todos los correcos de contacto
+     * Consulta a la base de datos para extraer todos los registros de criptomonedas
      */
     function getCripto() {
         return dbQuery("SELECT * FROM `criptomonedas`");

@@ -16,28 +16,13 @@ const db = require('./db')
 async function main() {
   /**
    * Se hace uso del await para que el programa detenga su ejecución hasta que se obtengas los valores de las
-   * variables login y contac
+   * variables login, contac, cripto y contentHTML
    */
   var login = await db.getAuth();
   var contact = await db.getContact();
   var from = ""
   contact.forEach(element => from = from.concat(',', element.email));
   from = from.substr(1);
-  /**
-   * crea un objeto transportador
-   */
-  let transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: login[0].email,
-    pass: login[0].password
-  }
-  });
-  /**
-   * 
-   */
   const cripto = await db.getCripto();
   console.log(cripto)
   var contentHTML = `<h1 class="title">Criptomonedas</h1>`;
@@ -52,6 +37,21 @@ async function main() {
   </div>
   `)
   });
+  /**
+   * crea un objeto transportador
+   */
+  let transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: login[0].email,
+    pass: login[0].password
+  }
+  });
+  /**
+   * envío del correo
+   */
   let info = await transporter.sendMail({
   from: login[0].email,
   to: from,
