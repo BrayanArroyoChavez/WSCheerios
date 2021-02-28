@@ -10,10 +10,8 @@
  * + Se hace uso de path para trabajar rutas de archivos
  */
 const nodemailer = require("nodemailer");
-const hbs = require("nodemailer-express-handlebars")
 const path = require('path');
 const db = require('./db')
-var ejs = require("ejs");
 
 async function main() {
   /**
@@ -38,21 +36,30 @@ async function main() {
   }
   });
   /**
-   * Busqueda del archivo handlebars
+   * 
    */
-  ejs.renderFile(__dirname + "/views/email.ejs", { name: 'Stranger' }, async function (err, data) {
-    if (err) {
-      console.log(err);
-    } else {
-      let info = await transporter.sendMail({
-      from: login[0].email,
-      to: from,
-      subject: 'Criptomonedas',
-      });
-    
-      console.log("Message sent: %s", info.messageId);
-    } 
+  const cripto = await db.getCripto();
+  console.log(cripto)
+  var contentHTML = `<h1 class="title">Criptomonedas</h1>`;
+  cripto.forEach(element => {
+  contentHTML = contentHTML.concat(' ',`
+  <div class="card" style="width: 18rem;">
+		<div class="card-body">
+			<h5 class="card-title">${element.name}</h5>
+			<h6 class="card-subtitle mb-2 text-muted">${element.symb}</h6>
+			<p class="card-text">${element.price}</p>
+		</div>
+  </div>
+  `)
   });
+  let info = await transporter.sendMail({
+  from: login[0].email,
+  to: from,
+  subject: 'Criptomonedas',
+  html: contentHTML
+  });
+
+  console.log("Message sent: %s", info.messageId);
 }
 
 main().catch(console.error);
