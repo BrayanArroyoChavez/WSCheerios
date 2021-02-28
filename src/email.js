@@ -13,6 +13,7 @@ const nodemailer = require("nodemailer");
 const hbs = require("nodemailer-express-handlebars")
 const path = require('path');
 const db = require('./db')
+var ejs = require("ejs");
 
 async function main() {
   /**
@@ -39,31 +40,19 @@ async function main() {
   /**
    * Busqueda del archivo handlebars
    */
-  const handlebarOptions = {
-    viewEngine: {
-      extName: ".handlebars",
-      partialsDir: path.resolve(__dirname, "views"),
-      defaultLayout: false,
-    },
-    viewPath: path.resolve(__dirname, "views"),
-    extName: ".handlebars",
-  };
+  ejs.renderFile(__dirname + "/views/email.ejs", { name: 'Stranger' }, async function (err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      let info = await transporter.sendMail({
+      from: login[0].email,
+      to: from,
+      subject: 'Criptomonedas',
+      });
     
-  transporter.use(
-    "compile",
-    hbs(handlebarOptions)
-  );
-  /**
-   * enviar correo con objeto de transporte definido
-   */
-  let info = await transporter.sendMail({
-  from: login[0].email,
-  to: from,
-  subject: "Prueba",
-  template: "email"
+      console.log("Message sent: %s", info.messageId);
+    } 
   });
-
-  console.log("Message sent: %s", info.messageId);
 }
 
 main().catch(console.error);

@@ -27,5 +27,5 @@ cripto.forEach(element => {
     card.appendChild(cardBody);
 
     body.appendChild(card)
-    console.log(body)
+    console.log("hola")
 });
